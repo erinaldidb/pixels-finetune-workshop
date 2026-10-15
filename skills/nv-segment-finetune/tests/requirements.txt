@@ -1,0 +1,8 @@
+# Test-only dependencies for CI. Versions verified together.
+PyYAML==6.0.3
+nibabel==5.4.2
+numpy==2.5.3
+pytest==9.1.1
+mlflow==3.17.1
+matplotlib==3.11.2
+pandas==3.0.6

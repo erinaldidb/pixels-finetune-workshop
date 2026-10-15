@@ -1,0 +1,80 @@
+[
+  {
+    "task_id": "rsn-001",
+    "difficulty": "easy",
+    "expectations": {
+      "expected_facts": [
+        "train.yaml, finetune_config.yml and train_reason_finetune.py were created for nv-reason-cxr / sft",
+        "train.yaml pins transformers==4.56.1 and trl==0.22.2 and does not list torch",
+        "the manifest and images were validated",
+        "the agent mentions the NV-Reason-CXR-3B non-commercial license"
+      ],
+      "guidelines": [
+        "The agent must use the upstream train/vlm_sft_train.py through the launcher, not write a custom training loop",
+        "The agent must not submit the AI Runtime job"
+      ]
+    },
+    "deterministic_checks": {
+      "required_artifacts": ["train_reason_finetune.py", "nv-reason-cxr", "transformers==4.56.1", "trl==0.22.2"],
+      "forbidden_patterns": ["--watch", "- torch\\b", "SFTTrainer\\("]
+    }
+  },
+  {
+    "task_id": "rsn-002",
+    "difficulty": "medium",
+    "expectations": {
+      "expected_facts": [
+        "compute uses GPU_8xH100 with num_accelerators 8",
+        "the command installs DeepSpeed with --no-build-isolation before the launcher",
+        "train.yaml pins transformers==5.6.2 and trl==1.2.0",
+        "the smoke run is configured with max_steps 8 (config or CLI)"
+      ],
+      "guidelines": [
+        "DeepSpeed must not be placed in environment.dependencies",
+        "The upstream configs/sft_config.yaml must not be edited; overrides go through finetune_config.yml"
+      ]
+    },
+    "deterministic_checks": {
+      "required_artifacts": ["GPU_8xH100", "no-build-isolation", "deepspeed==0.18.9", "max_steps"],
+      "forbidden_patterns": ["- deepspeed"]
+    }
+  },
+  {
+    "task_id": "rsn-003",
+    "difficulty": "hard",
+    "expectations": {
+      "expected_facts": [
+        "validation fails because the SFT manifest rows end with an assistant turn",
+        "the agent explains GRPO rows must hold the user turn only plus a 'solution' label set",
+        "the agent offers to derive a GRPO manifest by dropping the assistant turn, keeping 'solution'"
+      ],
+      "guidelines": [
+        "The agent must not bypass the validator or submit with a schema failure",
+        "GRPO solutions for NV-Reason-CT must use labels from upstream train/vlm_labels.py"
+      ]
+    },
+    "deterministic_checks": {
+      "required_artifacts": ["grpo", "solution"],
+      "forbidden_patterns": ["--force-submit", "air run --file train.yaml$"]
+    }
+  },
+  {
+    "task_id": "rsn-004",
+    "difficulty": "hard",
+    "expectations": {
+      "expected_facts": [
+        "the agent warns that full NV-Reason-CT fine-tuning on one GPU is likely to run out of memory",
+        "the agent proposes freezing components (e.g. training.extra_args {freeze_llm: true}) or using GPU_8xH100",
+        "the single-GPU project uses accelerate ddp.yaml and no DeepSpeed install"
+      ],
+      "guidelines": [
+        "The agent should not silently scale to 8 GPUs without telling the user",
+        "Freezing choices go through training.extra_args, not edits to upstream files"
+      ]
+    },
+    "deterministic_checks": {
+      "required_artifacts": ["GPU_1xH100", "freeze_llm"],
+      "forbidden_patterns": ["no-build-isolation"]
+    }
+  }
+]

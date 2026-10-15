@@ -1,0 +1,22 @@
+[
+  {
+    "task_id": "rsn-001",
+    "dataset": "/Volumes/<catalog>/<schema>/eval/nv_reason/cxr",
+    "query": "Set up an AI Runtime job to fine-tune NV-Reason-CXR-3B with SFT on my chest X-ray manifest /Volumes/<catalog>/<schema>/eval/nv_reason/cxr/sft.jsonl (images under /Volumes/<catalog>/<schema>/eval/nv_reason/cxr/images) in /Workspace/Users/<me>/air-reason-cxr, logging to /Users/<me>/Reason-Finetune. Validate it but do not submit."
+  },
+  {
+    "task_id": "rsn-002",
+    "dataset": "/Volumes/<catalog>/<schema>/eval/nv_reason/ct",
+    "query": "Fine-tune NV-Reason-CT on 8 H100s with SFT using /Volumes/<catalog>/<schema>/eval/nv_reason/ct/sft.jsonl and the NIfTI volumes under /Volumes/<catalog>/<schema>/eval/nv_reason/ct. Project in /Workspace/Users/<me>/air-reason-ct, MLflow experiment /Users/<me>/Reason-Finetune. I first want an 8-step smoke run. Validate, do not submit."
+  },
+  {
+    "task_id": "rsn-003",
+    "dataset": "/Volumes/<catalog>/<schema>/eval/nv_reason/ct",
+    "query": "Run GRPO on NV-Reason-CT with my manifest /Volumes/<catalog>/<schema>/eval/nv_reason/ct/sft.jsonl and images in /Volumes/<catalog>/<schema>/eval/nv_reason/ct. Put the project in /Workspace/Users/<me>/air-reason-ct-grpo. Do not submit."
+  },
+  {
+    "task_id": "rsn-004",
+    "dataset": "/Volumes/<catalog>/<schema>/eval/nv_reason/ct",
+    "query": "I only have a single H100. Prepare an NV-Reason-CT SFT project with /Volumes/<catalog>/<schema>/eval/nv_reason/ct/sft.jsonl (images under /Volumes/<catalog>/<schema>/eval/nv_reason/ct) in /Workspace/Users/<me>/air-reason-ct-1gpu. Do not submit."
+  }
+]

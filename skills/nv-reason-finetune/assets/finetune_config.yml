@@ -1,0 +1,39 @@
+# ============================================================================
+# {{MODEL_TITLE}} — upstream TRL {{WORKFLOW}} fine-tuning
+# ============================================================================
+# Used by: train_reason_finetune.py --config finetune_config.yml
+# Values left null keep the upstream configs/{{WORKFLOW}}_config.yaml setting.
+# ============================================================================
+
+model:
+  id: {{MODEL_ID}}
+  workflow: {{WORKFLOW}}        # sft (needs assistant answers) | grpo (needs 'solution' labels)
+  repo_commit: {{REPO_COMMIT}}
+  hf_revision: {{HF_REVISION}}
+
+dataset:
+  manifest: {{MANIFEST_PATH}}   # JSONL rows in the upstream datalists/{{WORKFLOW}}.jsonl format
+  image_dir: {{IMAGE_DIR}}      # root that relative image paths in the manifest resolve against
+  max_cases: null               # integer for a quick pipeline check, null = all rows
+
+training:
+  epochs: null                  # null = upstream config value
+  learning_rate: null
+  max_steps: null               # e.g. 8 for a smoke run; overrides epochs
+  per_device_train_batch_size: null
+  gradient_accumulation_steps: null
+  num_gpus: auto                # 1 → accelerate ddp.yaml; >1 → zero2.yaml (DeepSpeed)
+  extra_args: {}                # passed through as --key value, e.g. {freeze_llm: true}
+
+paths:
+  output_dir: /tmp/finetune_output
+
+evaluation:
+  max_cases: 4                  # last rows of the manifest held out of training and answered by
+                                # the base (before) and fine-tuned (after) model; 0 = skip
+
+mlflow:
+  experiment: {{EXPERIMENT_NAME}}
+  run_name: {{RUN_NAME}}
+  skip: false
+  log_model: true               # upload the final model + processor (several GB) as artifacts

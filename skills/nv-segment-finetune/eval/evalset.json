@@ -1,0 +1,22 @@
+[
+  {
+    "task_id": "seg-001",
+    "dataset": "/Volumes/pixels_workshop_catalog/image_chd/default/imagechd/extracted/ImageCHD_dataset",
+    "query": "I'm following the AI Runtime MONAI workshop notebook. Create the AI Runtime project for NV-Segment-CTMR in /Workspace/Users/<me>/air-segment-finetune using the ImageCHD scans in /Volumes/pixels_workshop_catalog/image_chd/default/imagechd/extracted/ImageCHD_dataset and the MLflow experiment /Users/<me>/Segment-Finetune, and check it is ready to submit. Do not submit the job."
+  },
+  {
+    "task_id": "seg-002",
+    "dataset": "/Volumes/pixels_workshop_catalog/image_chd/default/imagechd/extracted/ImageCHD_dataset",
+    "query": "Same ImageCHD cardiac dataset, but I want to fine-tune NV-Segment-CT instead of CTMR, with the fixed softmax head so inference returns all 7 structures. Set it up in /Workspace/Users/<me>/vista3d-ct-chd and validate it. Do not submit."
+  },
+  {
+    "task_id": "seg-003",
+    "dataset": "/Volumes/<catalog>/<schema>/eval/nv_segment/chambers_stray_labels",
+    "query": "My CT dataset at /Volumes/<catalog>/<schema>/eval/nv_segment/chambers_stray_labels only has the four heart chambers labelled 1=LV, 2=RV, 3=LA, 4=RA, but a few label files also contain leftover values 5-9 from another tool. Build the AI Runtime NV-Segment-CTMR fine-tuning project for it in /Workspace/Users/<me>/vista3d-chambers and make sure the label setup is correct. Do not submit."
+  },
+  {
+    "task_id": "seg-004",
+    "dataset": "/Volumes/pixels_workshop_catalog/image_chd/default/imagechd/extracted/ImageCHD_dataset",
+    "query": "Our existing train_ctmr_finetune.py sets 'train#trainer#max_epochs' and 'data_file_base_dir' in the MONAI override and stacks train.json + train_continual.json + train_continual_softmax.json. With epochs=10 the learning rate schedule looks wrong. Fix the project in /Workspace/Users/<me>/air-monai-workshop."
+  }
+]

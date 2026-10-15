@@ -1,0 +1,46 @@
+# ============================================================================
+# {{MODEL_TITLE}} — MONAI bundle fine-tuning ({{WORKFLOW}} workflow)
+# ============================================================================
+# Used by: train_segment_finetune.py --config finetune_config.yml
+# Priority: CLI flags > this file > model defaults > script DEFAULTS.
+# ============================================================================
+
+model:
+  id: {{MODEL_ID}}
+  workflow: {{WORKFLOW}}        # softmax (fixed, mutually exclusive classes) | standard (promptable)
+  repo_commit: {{REPO_COMMIT}}
+  hf_revision: {{HF_REVISION}}
+
+dataset:
+  src_dir: {{DATASET_PATH}}
+  image_glob: "ct_*_image.nii.gz"   # images under src_dir
+  label_from: "_image.nii.gz"       # label path = image path with label_from → label_to
+  label_to: "_label.nii.gz"
+  datalist: null                    # or an MSD datalist JSON (paths relative to src_dir, fold 0 = val)
+  label_mapping: {{LABEL_MAPPING}}
+  check_labels: true                # zero label values that are not in the mapping
+  max_cases: null                   # integer (>= 4) for quick debugging, null = all
+
+training:
+  epochs: 50
+  learning_rate: 5.0e-05
+  val_fraction: 0.15
+  random_seed: 42
+  patch_size: [96, 96, 96]
+  cache_rate: 1.0
+  auto_seg: false                   # standard workflow only: class-prompt-only training
+  num_gpus: auto                    # >1 launches torchrun with configs/multi_gpu_train.json
+
+paths:
+  output_dir: /tmp/finetune_output
+  msd_dir: /tmp/msd_staging
+
+evaluation:
+  max_cases: 3                      # validation cases scored before (pretrained) and after
+                                    # (fine-tuned) training; 0 = skip
+
+mlflow:
+  experiment: {{EXPERIMENT_NAME}}
+  run_name: {{RUN_NAME}}
+  skip: false
+  log_model: true                   # log an MLflow pyfunc model that Unity Catalog can register

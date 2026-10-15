@@ -1,0 +1,81 @@
+[
+  {
+    "task_id": "seg-001",
+    "difficulty": "easy",
+    "expectations": {
+      "expected_facts": [
+        "train.yaml, finetune_config.yml and train_segment_finetune.py were created",
+        "model.id is nv-segment-ctmr with the softmax workflow",
+        "the project was validated on CPU before suggesting submission",
+        "the next step given is databricks air run --file train.yaml from the project directory"
+      ],
+      "guidelines": [
+        "The training script must come from the scaffold, not be re-typed or shortened",
+        "The agent must not submit the AI Runtime job"
+      ]
+    },
+    "deterministic_checks": {
+      "required_artifacts": ["train_segment_finetune.py", "nv-segment-ctmr", "monai==1.4.0"],
+      "forbidden_patterns": ["--watch", "required=True", "- torch\\b"]
+    }
+  },
+  {
+    "task_id": "seg-002",
+    "difficulty": "hard",
+    "expectations": {
+      "expected_facts": [
+        "the agent explains that the ImageCHD chamber IDs (149, 151-154, 171) do not exist in the NV-Segment-CT label dictionary, so softmax cannot be used with them",
+        "the agent proposes either the standard workflow (new classes learned from scratch) or NV-Segment-CTMR with softmax",
+        "the final project validates"
+      ],
+      "guidelines": [
+        "The agent must not invent class IDs or silently map chambers to 'heart' (115)",
+        "The agent should surface the trade-off rather than forcing softmax"
+      ]
+    },
+    "deterministic_checks": {
+      "required_artifacts": ["standard", "label_dict"],
+      "forbidden_patterns": ["\\[\\s*\\d+\\s*,\\s*115\\s*\\]"]
+    }
+  },
+  {
+    "task_id": "seg-003",
+    "difficulty": "hard",
+    "expectations": {
+      "expected_facts": [
+        "dataset.label_mapping maps 1-4 to CTMR IDs 151, 152, 149, 153 in that order",
+        "the stray label values 5-9 are zeroed during staging (check_labels true), not mapped",
+        "the label mapping contains only positive foreground entries",
+        "validation passed"
+      ],
+      "guidelines": [
+        "The mapping must not contain [v, 0] padding entries; in softmax mode each entry becomes an output channel",
+        "Changes must go into finetune_config.yml, not the training loop"
+      ]
+    },
+    "deterministic_checks": {
+      "required_artifacts": ["label_mapping", "151", "152", "149", "153", "check_labels"],
+      "forbidden_patterns": ["\\[\\s*[5-9]\\s*,\\s*0\\s*\\]", "\"[5-9]\"\\s*:\\s*\\[\\s*0"]
+    }
+  },
+  {
+    "task_id": "seg-004",
+    "difficulty": "hard",
+    "expectations": {
+      "expected_facts": [
+        "the override sets top-level epochs so the warmup-cosine schedule t_total follows it",
+        "dataset_dir replaces data_file_base_dir",
+        "the softmax config runs alone plus the override",
+        "the fixed project passes validation"
+      ],
+      "guidelines": [
+        "The agent should switch to the reviewed launcher rather than patch upstream bundle files",
+        "Existing finetune_config.yml values (dataset path, MLflow experiment) must be preserved"
+      ]
+    },
+    "deterministic_checks": {
+      "required_artifacts": ["\"epochs\"", "dataset_dir", "train_continual_softmax.json"],
+      "forbidden_patterns": ["train#trainer#max_epochs", "data_file_base_dir"]
+    }
+  }
+]

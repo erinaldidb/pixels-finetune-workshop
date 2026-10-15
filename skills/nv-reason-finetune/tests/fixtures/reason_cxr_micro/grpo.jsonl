@@ -1,0 +1,3 @@
+{"id": "case-0", "image": "cxr_000.jpg", "solution": "No Finding", "messages": [{"role": "user", "content": [{"type": "image", "image": "cxr_000.jpg"}, {"type": "text", "text": "Find abnormalities and support devices."}]}]}
+{"id": "case-1", "image": "cxr_001.jpg", "solution": "No Finding", "messages": [{"role": "user", "content": [{"type": "image", "image": "cxr_001.jpg"}, {"type": "text", "text": "Find abnormalities and support devices."}]}]}
+{"id": "case-2", "image": "cxr_002.jpg", "solution": "No Finding", "messages": [{"role": "user", "content": [{"type": "image", "image": "cxr_002.jpg"}, {"type": "text", "text": "Find abnormalities and support devices."}]}]}
